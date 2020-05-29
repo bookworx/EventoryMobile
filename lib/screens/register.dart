@@ -21,13 +21,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String _picked = '';
 
  void addData() {
-    var url = "http://192.168.1.3/eventory/REST_API/adddata.php"; //change ip
+    var url = "http://192.168.1.2/eventory/REST_API/adddata.php";
 
     http.post(url, body: {
       "fullName":_fullnameControl.text,
       "email": _emailControl.text,
-      "password": _passwordControl.text, //aqui traemos el DropdownMenuItem lo llamamos _mySelection este es como el controller
-       "accountType": _picked
+      "password": _passwordControl.text,
     });
   }
 

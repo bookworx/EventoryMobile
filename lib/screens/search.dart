@@ -36,7 +36,7 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
   // List<Note> _notesForDisplay = List<Note>();
 
   // Future<List<Note>> fetchNotes() async {
-  //   var url = "http://192.168.169.2/eventinventory/login.php";
+  //   var url = "http://192.168.1.2/eventory/login.php";
   //   var response = await http.post(url, body: {"event": "search"});
 
   //   var notes = List<Note>();

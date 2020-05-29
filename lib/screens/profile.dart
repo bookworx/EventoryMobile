@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-//
 import 'package:image_picker_modern/image_picker_modern.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
-import 'package:toast/toast.dart';
+
 import 'package:http/http.dart' as http;
+import 'package:async/async.dart';
+import 'package:path/path.dart';
 
 class Profile extends StatefulWidget {
- Profile({this.username});
-  final String username;
-  
   @override
+  
   _ProfileState createState() => _ProfileState();
 }
 
@@ -26,11 +25,24 @@ class _ProfileState extends State<Profile> {
   final TextEditingController _srateControl = TextEditingController();
   final TextEditingController _yearsxpControl = TextEditingController();
   final TextEditingController _fbpageControl = TextEditingController();
+
   
-  String _picked = 'supplier';
   
+   @override
+  void initState() {
+    //added by Jhunes
+    super.initState();
+    getData();
+  } //added by Jhunes
+
   File _image;
   String fullname, email, phone, address, bio, category, srate, yearsxp, fbpage;
+  
+  String name = '';
+  String _email = '';
+  String _picked = '';
+
+
 
   Future getImage() async {
     var image = await
@@ -42,32 +54,49 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+ Future<List> getData() async {
+    final response = await http.post("http://192.168.1.2/eventory/login.php", body: {
+      "event": "profile",
+    });
+     print(response.body);
+     
+     var datauser = json.decode(response.body); 
 
-  Future<String> getData() async {
-    http.Response response = await http.get(
-      Uri.encodeFull("http://192.168.1.3/eventory/REST_API/getdata.php"),
-      headers: {
-       "Accept": "application/json" 
-      }
-    );
-
-     List data = json.decode(response.body);
-
+    
     setState(() {
-        fullname = data[0]['fullName'];
-        email = data[0]['email'];
-        phone = data[0]['supplierPhone'];
-        address = data[0]['supplierAddress'];
-        bio = data[0]['supplierBio'];
-        category = data[0]['supplierCategory'];
-        srate = data[0]['supplierRate'];
-        yearsxp = data[0]['supplierYears'];
-        fbpage = data[0]['supplierFacebook'];
+        name = datauser[0]['fullName'];
+        _email = datauser[0]['email'];
+        _picked = datauser[0]['accountType'];
+       
       });
+     return json.decode(response.body);
+     
   }
+  
+  // Future<String> getData() async {
+  //   http.Response response = await http.get(
+  //     Uri.encodeFull("http://192.168.1.2/eventory/REST_API/getdata.php"),
+  //     headers: {
+  //      "Accept": "application/json" 
+  //     }
+  //   );
+
+  //   print(response.body);
+
+  //    List data = json.decode(response.body);
+  //   // print(data[0]["email"]);
+  //   // print(data[0]["password"]);
+  //   // print(data[0]["fullName"]);
+  //   // print(data[0]["accountType"]);
+  //   setState(() {
+  //       name = data[0]['supplierPhone'];
+  //       emailAdd = data[0]['supplierAddress'];
+     
+  //     });
+  // }
 
   void updateData() {
-    var url = "http://192.168.1.3/eventory/REST_API/updateData.php";
+    var url = "http://192.168.1.2/eventory/REST_API/updateData.php";
 
     http.post(url, body: {
       "fullName": _fullnameControl.text,
@@ -82,9 +111,41 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+Future upload(File imageFile) async{
+  var stream= new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+  var length= await imageFile.length();
+  var uri = Uri.parse("http://192.168.1.2/eventory/REST_API/imgUpload.php");
+
+  var request = new http.MultipartRequest("POST", uri);
+
+  var multipartFile = new http.MultipartFile("image", stream, length, filename: basename(imageFile.path)); 
+  request.files.add(multipartFile); 
+
+  var response = await request.send();
+
+  if(response.statusCode==200){
+    print("Image Uploaded");
+  }else{
+    print("Upload Failed");
+  }
+  response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
+    //  var url = "http://192.168.1.2/eventory/REST_API/updateData.php";
+
+    // http.post(url, body: {
+    //   "supplierPhone":_phoneControl.text,
+    //   "supplierAddress":  _addressControl.text,
+    //   "supplierBio": _bioControl .text, 
+    //   "supplierRate": _srateControl.text,
+    //   "supplierYears": _yearsxpControl.text,
+       
+    // });
+}
+
   @override
   Widget build(BuildContext context) {
-    if (_picked == 'supplier') {
+    if (_picked == 'I am Supplier') {
       return Scaffold(
         body: Padding(
           padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
@@ -117,7 +178,7 @@ class _ProfileState extends State<Profile> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              "$fullname",
+                              "$name",
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
@@ -142,6 +203,7 @@ class _ProfileState extends State<Profile> {
                         InkWell(
                           onTap: () {
                             getImage();
+                            upload(_image);
                             // Navigator.of(context).push(
                             //   MaterialPageRoute(
                             //     builder: (BuildContext context){
@@ -177,6 +239,13 @@ class _ProfileState extends State<Profile> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  FlatButton(
+                      child:
+                      Text (''),
+                      onPressed: () {
+                      // upload(_image);
+                      }
+                      ),
                 ],
               ),
               TextField(
@@ -188,7 +257,7 @@ class _ProfileState extends State<Profile> {
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.person),
-                  labelText: '$fullname',
+                  labelText: '$name',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -206,7 +275,7 @@ class _ProfileState extends State<Profile> {
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.email),
-                  labelText: '$email',
+                  labelText: '$_email',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -224,7 +293,7 @@ class _ProfileState extends State<Profile> {
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.phone),
-                  labelText: '$phone',
+                  labelText: 'Phone',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -242,7 +311,7 @@ class _ProfileState extends State<Profile> {
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.home),
-                  labelText: '$address',
+                  labelText: 'Address',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -278,7 +347,7 @@ class _ProfileState extends State<Profile> {
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.subject),
-                  labelText: '$bio',
+                  labelText: 'Bio',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -292,11 +361,11 @@ class _ProfileState extends State<Profile> {
                 onChanged: (value){
                   debugPrint('category: $value');
                    category = value; //SEND THIS DATA
-                   debugPrint(category);
+                  // debugPrint(category);
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.work),
-                  labelText: '$category',
+                  labelText: 'Service Category',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -314,7 +383,7 @@ class _ProfileState extends State<Profile> {
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.local_offer),
-                  labelText: '$srate',
+                  labelText: 'Starting Rate',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -332,7 +401,7 @@ class _ProfileState extends State<Profile> {
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.hourglass_full),
-                  labelText: '$yearsxp',
+                  labelText: 'Years of Experience',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -350,7 +419,7 @@ class _ProfileState extends State<Profile> {
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.web),
-                  labelText: '$fbpage',
+                  labelText: 'Facebook Page',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -381,8 +450,8 @@ class _ProfileState extends State<Profile> {
                       color: Theme.of(context).accentColor,
                       onPressed: () {
                       updateData();
-                      Toast.show("Profile Updated", context,
-                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      // Toast.show("Profile Updated", context,
+                      // duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                       //getData();
                       }
                       ),

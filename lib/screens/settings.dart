@@ -17,10 +17,10 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
 
-  String name = ''; //added by Jhunes
-  bool isLoggedIn = false; //added by Jhunes
+  String name = ''; 
+  bool isLoggedIn = false; 
 
-  Future<Null> logout() async { //added by Jhunes
+  Future<Null> logout() async { 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('accountID', null);
 
@@ -141,7 +141,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         color: Theme.of(context).accentColor,
                       ),
                       onPressed: () {
-                        logout(); //added by Jhunes
+                        logout(); 
                         Navigator.of(context).push(
                         MaterialPageRoute(
                         builder: (BuildContext context){
