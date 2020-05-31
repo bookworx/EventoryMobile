@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-//
-//import 'package:Eventory/podo/note.dart'; //reference
-//
-//import 'package:intl/intl.dart';
-//import 'package:http/http.dart' as http;
-//import 'dart:convert';
-//
+import 'package:Eventory/util/providers_data.dart'; //reference
+
+// import 'package:Eventory/podo/note.dart'; //reference
+
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
+
 //import 'package:Eventory/screens/provider_info.dart'; //destination
 
 class SearchScreen extends StatefulWidget {
@@ -166,60 +166,51 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
             ),
           ),
 
-//           ListView.builder(
-//             shrinkWrap: true,
-//             primary: false,
-//             physics: NeverScrollableScrollPhysics(),
-//             itemCount: suppliers == null ? 0 :suppliers.length,
-//             itemBuilder: (BuildContext context, int index) {
-//               Map supplier = suppliers[index];
-//               return ListTile(
-//                 title: Text(
-//                   "${supplier['name']}",
-//                   style: TextStyle(
-// //                    fontSize: 15,
-//                     fontWeight: FontWeight.w900,
-//                   ),
-//                 ),
+          ListView.builder(
+            shrinkWrap: true,
+            primary: false,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: suppliers == null ? 0 :suppliers.length, //the source of data
+            itemBuilder: (BuildContext context, int index) {
+              Map supplier = suppliers[index]; //the source of data
+              return ListTile(
+                title: Text(
+                  "${supplier['name']}",
+                  style: TextStyle(
+//                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
                 
-//                 leading: CircleAvatar(
-//                   radius: 25.0,
-//                   backgroundImage: AssetImage(
-//                     "${supplier['img']}",
-//                   ),
-//                 ),
-//                 trailing: Text(supplier['srate']), //must change
+                leading: CircleAvatar(
+                  radius: 25.0,
+                  backgroundImage: AssetImage(
+                    "${supplier['img']}",
+                  ),
+                ),
+                trailing: Text(supplier['srate']), //must change
 
-//                 subtitle:
-//                 Row(
-//                   children: <Widget>[
+                subtitle:
+                Row(
+                  children: <Widget>[
                     
-//                 Text(
-//                   "${supplier['scategory']}",
-//                   style: TextStyle(
-//                     fontSize: 12.0,
-//               ),
-//               maxLines: 2,
-//             ),
+                Text(
+                  "${supplier['scategory']}",
+                  style: TextStyle(
+                    fontSize: 12.0,
+              ),
+              maxLines: 2,
+            ),
 
-//             SizedBox(width: 6.0),
-
-//                     SmoothStarRating(
-//                       starCount: 5, //must change
-//                       color: Constants.ratingBG,
-//                       allowHalfRating: true,
-//                       rating: 5.0, //must change
-//                       size: 12.0, //must change
-//                     ),
-//                     SizedBox(width: 6.0),
+            SizedBox(width: 6.0),
                     
-//                     Text(
-//                       "5.0", //must change
-//                       style: TextStyle(
-//                         fontSize: 12,
-//                         fontWeight: FontWeight.w300,
-//                       ),
-//                     ),
+                    Text(
+                      "5.0", //must change
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
 
                   ],
                 ),
@@ -234,18 +225,18 @@ class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClie
       //  },
               );
             }
-        //  ),
-//         ListView.builder(
-//           itemBuilder: (context, index) {
-//             return index == 0 ? _searchBar() : _listItem(index - 1);
-//           },
-//           itemCount: _notesForDisplay.length + 1,
-//           ),
-//           SizedBox(height: 30),
-//         ],
-//       ),
-//     );
-//   }
+         ),
+        // ListView.builder(
+        //   itemBuilder: (context, index) {
+        //     return index == 0 ? _searchBar() : _listItem(index - 1);
+        //   },
+        //   itemCount: _notesForDisplay.length + 1,
+        //   ),
+          SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
   //   _searchBar() {
   //   return Padding(
   //     padding: const EdgeInsets.all(8.0),

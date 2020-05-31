@@ -41,9 +41,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> with AutomaticKeepAlive
               height: 500.0,
               child:
           ListView.builder(
-            itemCount: suppliers == null ? 0 :suppliers.length,
+            itemCount: suppliers == null ? 0 :suppliers.length, //the source of data
             itemBuilder: (BuildContext context, int index) {
-              Map supplier = suppliers[index];
+              Map supplier = suppliers[index]; //the source of data
               return CartItem (
                 img: supplier['img'],
                 name: supplier['name'],

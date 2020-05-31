@@ -36,11 +36,20 @@ class _ProfileState extends State<Profile> {
   } //added by Jhunes
 
   File _image;
-  String fullname, email, phone, address, bio, category, srate, yearsxp, fbpage;
+  String fullname, email;
   
+  // String image = '';
   String name = '';
   String _email = '';
   String _picked = '';
+
+  String phone = '';
+  String address = '';
+  String bio = "";
+  String category = '';
+  String srate ='';
+  String yearsxp = '';
+  String fbpage = '';
 
 
 
@@ -64,9 +73,17 @@ class _ProfileState extends State<Profile> {
 
     
     setState(() {
+        // image = datauser[0]['image'];
         name = datauser[0]['fullName'];
         _email = datauser[0]['email'];
         _picked = datauser[0]['accountType'];
+        phone = datauser[0]['supplierPhone'];
+        address = datauser[0]['supplierAddress'];
+        bio = datauser[0]['supplierBio'];
+        category = datauser[0]['supplierCategory'];
+        srate = datauser[0]['supplierRate'];
+        yearsxp = datauser[0]['supplierYears'];
+        fbpage = datauser[0]['supplierFacebook'];
        
       });
      return json.decode(response.body);
@@ -293,7 +310,7 @@ Future upload(File imageFile) async{
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.phone),
-                  labelText: 'Phone',
+                  labelText: '$phone',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -311,7 +328,7 @@ Future upload(File imageFile) async{
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.home),
-                  labelText: 'Address',
+                  labelText: '$address',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -347,7 +364,7 @@ Future upload(File imageFile) async{
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.subject),
-                  labelText: 'Bio',
+                  labelText: '$bio',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -365,7 +382,7 @@ Future upload(File imageFile) async{
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.work),
-                  labelText: 'Service Category',
+                  labelText: '$category',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -383,7 +400,7 @@ Future upload(File imageFile) async{
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.local_offer),
-                  labelText: 'Starting Rate',
+                  labelText: '$srate',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -401,7 +418,7 @@ Future upload(File imageFile) async{
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.hourglass_full),
-                  labelText: 'Years of Experience',
+                  labelText: '$yearsxp',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -419,7 +436,7 @@ Future upload(File imageFile) async{
                 },
                 decoration: InputDecoration(
                   icon: Icon(Icons.web),
-                  labelText: 'Facebook Page',
+                  labelText: '$fbpage',
                   labelStyle: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,

@@ -54,9 +54,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
                 childAspectRatio: MediaQuery.of(context).size.width /
                     (MediaQuery.of(context).size.height / 1.25),
               ),
-              itemCount: suppliers == null ? 0 : suppliers.length,
+              itemCount: suppliers == null ? 0 : suppliers.length, //the source of data
               itemBuilder: (BuildContext context, int index) {
-                Map supplier = suppliers[index];
+                Map supplier = suppliers[index]; //the source of data
 
                 return GridProduct(
                   img: supplier['img'],
